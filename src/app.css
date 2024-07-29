@@ -23,13 +23,13 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-	background: #661b49;
+	background: #3d1e32;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #4d0b2f;
+	background: #2e081d;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #310721;
+	background: #1f0615;
 }

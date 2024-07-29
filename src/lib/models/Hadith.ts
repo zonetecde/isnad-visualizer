@@ -1,17 +1,9 @@
-import {
-	DataTypes,
-	Model,
-	type CreationOptional,
-	type InferAttributes,
-	type InferCreationAttributes
-} from '@sequelize/core';
+import { DataTypes, Model, type CreationOptional, type InferAttributes, type InferCreationAttributes } from '@sequelize/core';
 
 import { Attribute, PrimaryKey, AutoIncrement, NotNull } from '@sequelize/core/decorators-legacy';
+import type Scholar from './Scholar';
 
-export default class Hadith extends Model<
-	InferAttributes<Hadith>,
-	InferCreationAttributes<Hadith>
-> {
+export default class Hadith extends Model<InferAttributes<Hadith>, InferCreationAttributes<Hadith>> {
 	@Attribute(DataTypes.INTEGER)
 	@PrimaryKey
 	@AutoIncrement
@@ -44,4 +36,6 @@ export default class Hadith extends Model<
 	@Attribute(DataTypes.TEXT)
 	@NotNull
 	declare textEnglish: string;
+
+	declare transmissionChain: Scholar[];
 }
