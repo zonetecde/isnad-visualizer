@@ -11,12 +11,12 @@ async function addHadithsToDb() {
 	// Ajoute à la db les hadiths
 	const hadithList = hadiths.map((hadith: any) => ({
 		hadithId: hadith.hadith_id || -1,
-		source: hadith.source || '',
+		source: hadith.source.trim() || '',
 		chapterNumber: hadith.chapter_no || -1,
 		hadithNumber: hadith.hadith_no || -1,
 		chain: (hadith.chain_indx || '').split(',').map(Number),
-		textArabic: hadith.text_ar || '',
-		textEnglish: hadith.text_en || ''
+		textArabic: hadith.text_ar.trim() || '',
+		textEnglish: hadith.text_en.trim() || ''
 	}));
 
 	try {
@@ -27,7 +27,7 @@ async function addHadithsToDb() {
 	}
 
 	let chapterList = hadiths.map((hadith: any) => ({
-		source: hadith.source || '',
+		source: hadith.source.trim() || '',
 		chapterNumber: hadith.chapter_no || -1,
 		chapterTitle: hadith.chapter || ''
 	}));
@@ -78,7 +78,7 @@ async function addNarratorsToDb() {
 		narratorsList.push({
 			nameArabic: narrator.arabicName,
 			nameEnglish: narrator.englishName,
-			grade: narrator.grade,
+			grade: narrator.grade.trim(),
 			scholarId: narrator.scholar_indx
 		});
 	});

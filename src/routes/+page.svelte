@@ -1,9 +1,7 @@
 <script lang="ts">
-	import FirstStep from '$lib/components/firstStep.svelte';
-	import HadithPicker from '$lib/components/HadithPicker.svelte';
-	import IsnadInput from '$lib/components/isnadInput.svelte';
-	import SecondStep from '$lib/components/secondStep.svelte';
-	import { isnads } from '$lib/stores/globalStore';
+	import HadithsPicker from '$lib/components/HadithsPicker.svelte';
+	import { Page } from '$lib/models/Page';
+	import { currentPage } from '$lib/stores/globalStore';
 	import toast from 'svelte-french-toast';
 </script>
 
@@ -12,7 +10,7 @@
 		<h1 class="text-4xl font-bold text-center">Isnad Visualizer</h1>
 
 		{#if $currentPage === Page.HadithPicker}
-			<HadithPicker />
+			<HadithsPicker />
 		{/if}
 	</div>
 </div>
