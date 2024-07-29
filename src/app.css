@@ -1,13 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&family=Molengo&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@100..800&family=Molengo&family=Noto+Naskh+Arabic:wght@400..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Zain:wght@200;300;400;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
 	/* dark theme */
-	background-color: #1a202c;
+	background-color: #250f1f;
 	color: #e2e8f0;
 
 	/* font */
 	font-family: 'Nunito', sans-serif;
+}
+
+.arabic {
+	font-family: 'Noto Naskh Arabic', sans-serif;
+}
+
+/* scroll bar */
+::-webkit-scrollbar {
+	width: 6px;
+}
+
+::-webkit-scrollbar-track {
+	background: #661b49;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #4d0b2f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #310721;
 }
