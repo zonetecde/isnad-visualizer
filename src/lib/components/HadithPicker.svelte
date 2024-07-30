@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type Hadith from '$lib/models/Hadith';
-	import { hadithBooks, hadithPickerModalVisible, isFetching } from '$lib/stores/globalStore';
+	import { hadithBooks, hadithEditorModalVisible, hadithPickerModalVisible, isFetching, selectedHadiths } from '$lib/stores/globalStore';
 	import { onMount } from 'svelte';
 	import HadithCard from './HadithCard.svelte';
 	import toast from 'svelte-french-toast';
+	import { createBlankHadith } from '$lib/models/Utilities';
 
 	let selectedHadithBook: string = '';
 	let selectedHadithBookChapters: string[] = [];
@@ -34,6 +35,7 @@
 	function searchHadithByText() {
 		if (searchText) {
 			noHadithsFound = false;
+			selectedHadithChapterHadiths = [];
 
 			isFetching.set(true);
 
@@ -43,9 +45,21 @@
 				.then((data) => {
 					selectedHadithChapterHadiths = data;
 
-					console.log(data);
-
 					if (data.length === 0) noHadithsFound = true;
+					else {
+						// wait for svelte to render the hadith cards
+						setTimeout(() => {
+							// Put in bold the searched text
+							const elements = document.querySelectorAll('.hadith-card-text');
+							elements.forEach((element) => {
+								searchText.split(' ').forEach((searchText) => {
+									const text = element.innerHTML;
+									const regex = new RegExp(searchText, 'gi');
+									element.innerHTML = text.replace(regex, `<b class='text-green-800'>${searchText}</b>`);
+								});
+							});
+						}, 0);
+					}
 				})
 				.catch((error) => console.error(error))
 				.finally(() => isFetching.set(false));
@@ -91,6 +105,18 @@
 			.catch((error) => console.error(error))
 			.finally(() => isFetching.set(false));
 	}
+
+	function createCustomHadith() {
+		const hadithId = new Date().getTime();
+
+		const newHadith = createBlankHadith(hadithId);
+
+		selectedHadiths.update((h) => [...h, newHadith]);
+
+		setTimeout(() => {
+			hadithEditorModalVisible.set(hadithId);
+		}, 0);
+	}
 </script>
 
 <div class="flex w-full h-full items-center justify-center">
@@ -107,6 +133,28 @@
 		</button>
 
 		<h3 class="text-center text-2xl font-bold mb-5">Hadith(s) selector</h3>
+
+		<div class="flex flex-row gap-x-1.5">
+			<input
+				type="text"
+				class="bg-[#463a42] h-full py-1.5 px-1 rounded-lg w-full outline-none"
+				placeholder="Search by text"
+				bind:value={searchText}
+				on:keydown={(e) => {
+					if (e.key === 'Enter') {
+						searchHadithByText();
+					}
+				}}
+			/>
+
+			<button class="bg-[#523047] rounded-lg px-1" on:click={searchHadithByText}>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+				</svg>
+			</button>
+		</div>
+
+		<p class="my-1.5 mb-1">or</p>
 
 		<div class="grid grid-cols-2 gap-x-2">
 			<select class="bg-[#463a42] h-full py-1.5 px-1 rounded-lg w-full outline-none" bind:value={selectedHadithBook}>
@@ -146,35 +194,13 @@
 			{/if}
 		</div>
 
-		<p class="my-2">or</p>
-
-		<div class="flex flex-row gap-x-1.5">
-			<input
-				type="text"
-				class="bg-[#463a42] h-full py-1.5 px-1 rounded-lg w-full outline-none"
-				placeholder="Search by text"
-				bind:value={searchText}
-				on:keydown={(e) => {
-					if (e.key === 'Enter') {
-						searchHadithByText();
-					}
-				}}
-			/>
-
-			<button class="bg-[#523047] rounded-lg px-1" on:click={searchHadithByText}>
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-					<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-				</svg>
-			</button>
-		</div>
-
 		{#if $isFetching}
 			<div class="flex items-center justify-center my-auto scale-150 pb-10">
 				<div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-purple-500"></div>
 			</div>
 		{/if}
 
-		{#if selectedHadithChapterHadiths.length > 0 && (selectedHadithBook || searchText)}
+		{#if selectedHadithChapterHadiths.length > 0}
 			<div class="flex flex-col mt-6 w-full gap-y-3 overflow-auto">
 				{#each selectedHadithChapterHadiths as hadith}
 					<HadithCard {hadith} />
@@ -186,6 +212,6 @@
 			<p class="text-center text-lg mt-5">No hadiths found</p>
 		{/if}
 
-		<p class="mt-auto text-center underline cursor-pointer">Cannot find the hadith you are looking for?</p>
+		<button class="mt-auto text-center underline cursor-pointer" on:click={createCustomHadith}>Cannot find the hadith you are looking for?</button>
 	</div>
 </div>

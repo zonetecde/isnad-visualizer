@@ -31,9 +31,9 @@
 		{/if}
 	</p>
 
-	<p class="arabic overflow-hidden line-clamp-3" dir="rtl">{hadith.textArabic}</p>
+	<p class="arabic overflow-hidden hadith-card-text" dir="rtl">{hadith.textArabic}</p>
 
-	<p class="mt-2 text-sm overflow-hidden line-clamp-3">{hadith.textEnglish}</p>
+	<p class="mt-2 text-sm overflow-hidden hadith-card-text">{hadith.textEnglish}</p>
 
 	{#if showChain && hadith.transmissionChain}
 		<div class="mt-4">
@@ -48,7 +48,7 @@
 				on:click={() => {
 					// Open the hadith editor modal
 					hadithEditorModalVisible.set(hadith.id);
-				}}>Edit Hadith</button
+				}}>Edit</button
 			>
 		{/if}
 		<button
@@ -58,7 +58,7 @@
 			on:click={() => {
 				if ($selectedHadiths.includes(hadith)) selectedHadiths.set($selectedHadiths.filter((h) => h.id !== hadith.id));
 				else selectHadith();
-			}}>{$selectedHadiths.includes(hadith) ? 'Remove Hadith' : 'Add Hadith'}</button
+			}}>{$selectedHadiths.includes(hadith) ? 'Remove' : 'Add Hadith'}</button
 		>
 	</div>
 </div>

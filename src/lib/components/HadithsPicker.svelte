@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type Hadith from '$lib/models/Hadith';
 	import { hadithBooks, hadithEditorModalVisible, hadithPickerModalVisible, selectedHadiths } from '$lib/stores/globalStore';
 	import { onMount } from 'svelte';
 	import HadithPicker from './HadithPicker.svelte';

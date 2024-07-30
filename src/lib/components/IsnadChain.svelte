@@ -1,17 +1,13 @@
 <script lang="ts">
 	import type Scholar from '$lib/models/Scholar';
+	import { createUnknownScholar } from '$lib/models/Utilities';
+	import ScholarPicker from './ScholarPicker.svelte';
 
 	export let transmissionChain: Scholar[];
 	export let editable: boolean = false;
 
-	function createUnknownScholar(): Scholar {
-		return {
-			nameArabic: 'مجهول',
-			nameEnglish: 'Unknown',
-			scholarId: -1,
-			grade: ''
-		} as Scholar;
-	}
+	let editedScholarIndex: number = -1;
+	let openedScholarPicker: boolean = false;
 
 	function addScholarBefore(i: number): any {
 		transmissionChain = [...transmissionChain.slice(0, i), createUnknownScholar(), ...transmissionChain.slice(i)];
@@ -21,6 +17,8 @@
 		transmissionChain = [...transmissionChain.slice(0, i + 1), createUnknownScholar(), ...transmissionChain.slice(i + 1)];
 	}
 </script>
+
+<p class="mt-3"><span class="underline underline-offset-2">Isnad chain:</span> {editable ? '(hover over the chain to see the options)' : ''}</p>
 
 <div class={'flex overflow-auto gap-y-2 py-3 ' + (editable ? 'pr-20' : '')}>
 	{#each transmissionChain as transmitter, i}
@@ -41,7 +39,13 @@
 
 				{#if editable}
 					<div class="flex gap-x-2">
-						<button class="bg-yellow-800 rounded-full px-1 mt-2 hidden group-hover:block" on:click={() => {}}>
+						<button
+							class="bg-yellow-800 rounded-full px-1 mt-2 hidden group-hover:block"
+							on:click={() => {
+								editedScholarIndex = i;
+								openedScholarPicker = true;
+							}}
+						>
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
 								<path
 									stroke-linecap="round"
@@ -54,6 +58,11 @@
 							class="bg-red-800 rounded-full mt-2 hidden group-hover:block"
 							on:click={() => {
 								transmissionChain = transmissionChain.filter((_, index) => index !== i);
+
+								if (transmissionChain.length === 0) {
+									// Add unknown scholar if the chain is empty
+									transmissionChain = [createUnknownScholar()];
+								}
 							}}
 						>
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -80,3 +89,12 @@
 		</div>
 	{/each}
 </div>
+
+{#if openedScholarPicker}
+	<ScholarPicker
+		bind:scholar={transmissionChain[editedScholarIndex]}
+		on:close={() => {
+			openedScholarPicker = false;
+		}}
+	/>
+{/if}
