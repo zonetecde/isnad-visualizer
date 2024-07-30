@@ -17,7 +17,7 @@
 </script>
 
 <div class="w-screen h-screen flex justify-center items-center">
-	<div class="w-10/12 h-5/6 border-4 rounded-xl">
+	<div class="w-10/12 h-5/6 border-4 rounded-xl bg-[#99b0e2]">
 		<!-- <div class="mt-5 flex flex-col gap-y-3 overflow-auto">
 
 	</div> -->
@@ -57,4 +57,8 @@
 			</div>
 		{/if}
 	</div>
+
+	<button class="absolute bottom-6 text-xl font-bold bg-[#203e64] text-white px-4 py-1.5 rounded-lg hover:bg-[#122f55] duration-100" on:click={() => currentPage.set(Page.IsnadViewer)}>
+		Visualize Isnad
+	</button>
 </div>

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import HadithsSelector from '$lib/components/Page/HadithsSelector.svelte';
+	import IsnadViewer from '$lib/components/Page/IsnadViewer.svelte';
 	import Main from '$lib/components/Page/Main.svelte';
 	import { Page } from '$lib/models/Page';
-	import { currentPage } from '$lib/stores/globalStore';
+	import { currentPage, pageName } from '$lib/stores/globalStore';
 	import toast from 'svelte-french-toast';
 </script>
 
@@ -11,5 +12,7 @@
 		<Main />
 	{:else if $currentPage === Page.HadithSelector}
 		<HadithsSelector />
+	{:else if $currentPage === Page.IsnadViewer}
+		<IsnadViewer />
 	{/if}
 </div>
