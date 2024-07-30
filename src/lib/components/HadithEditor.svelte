@@ -17,8 +17,8 @@
 	}
 </script>
 
-<div class="flex w-full h-full items-center justify-center">
-	<div class="w-8/12 h-[90%] bg-[#22131c] rounded-xl p-3 flex flex-col relative border-4 border-[#180a13] overflow-auto">
+<div class="flex w-full h-full items-center justify-center bg-black bg-opacity-50">
+	<div class="w-8/12 h-[90%] bg-[#c1bdfa] rounded-xl p-3 flex flex-col relative border-4 border-[#d3d3d3] overflow-auto">
 		<button class="absolute top-2 right-2" on:click={saveAndClose}>
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
 				<path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -30,12 +30,12 @@
 		{#if hadith}
 			<label class="mt-3"
 				>Arabic text
-				<textarea class="w-full h-40 p-2 border-2 bg-[#2d1d31] rounded-r-xl outline-none arabic" dir="rtl" bind:value={hadith.textArabic} placeholder="Arabic text"></textarea>
+				<textarea class="w-full h-40 p-2 border-2 bg-[#dfdef5] rounded-r-xl outline-none arabic" dir="rtl" bind:value={hadith.textArabic} placeholder="Arabic text"></textarea>
 			</label>
 
 			<label class="mt-4"
 				>English text
-				<textarea class="w-full h-40 p-2 border-2 bg-[#2d1d31] rounded-l-xl outline-none" bind:value={hadith.textEnglish} placeholder="English text"></textarea>
+				<textarea class="w-full h-40 p-2 border-2 bg-[#dfdef5] rounded-l-xl outline-none" bind:value={hadith.textEnglish} placeholder="English text"></textarea>
 			</label>
 
 			<IsnadChain bind:transmissionChain={hadith.transmissionChain} editable />

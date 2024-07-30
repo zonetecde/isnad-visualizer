@@ -7,8 +7,10 @@
 	export let hadith: Hadith;
 	export let showChain: boolean = false; // Whether to show the transmission chain of the hadith
 
-	function selectHadith() {
-		selectedHadiths.update((h) => [...h, hadith]);
+	$: isSelected = $selectedHadiths.find((x) => x.id === hadith.id);
+
+	function addHadith() {
+		selectedHadiths.update((h) => [hadith, ...h]);
 
 		// Fetch the transmission chain of the hadith
 		fetch('/api/get-transmission-chain?hadithId=' + hadith.hadithId)
@@ -22,7 +24,7 @@
 	}
 </script>
 
-<div class="bg-[#00000044] w-full p-2 rounded-l-xl flex flex-col border-2 border-[#2d1d31]">
+<div class="bg-[#ffffff] w-full p-2 flex flex-col border-2">
 	<p class="text-sm mb-1">
 		{hadith.source}
 
@@ -41,10 +43,10 @@
 		</div>
 	{/if}
 
-	<div class="flex">
+	<div class={'flex ' + (showChain ? 'mt-2' : '')}>
 		{#if showChain}
 			<button
-				class={'ml-auto mt-3 text-sm  text-white px-2 pt-1.5 pb-1 rounded-lg  duration-100 bg-yellow-800 hover:bg-yellow-900 '}
+				class={'ml-auto text-sm  text-white px-2 pt-1.5 pb-1 rounded-lg duration-100 bg-yellow-600 hover:bg-yellow-700 '}
 				on:click={() => {
 					// Open the hadith editor modal
 					hadithEditorModalVisible.set(hadith.id);
@@ -52,13 +54,11 @@
 			>
 		{/if}
 		<button
-			class={'mt-3 text-sm  text-white px-2 pt-1.5 pb-1 rounded-lg  duration-100 ' +
-				($selectedHadiths.includes(hadith) ? 'bg-red-800 hover:bg-red-900 ' : 'bg-purple-800 hover:bg-purple-900 ') +
-				(showChain ? 'ml-2' : 'ml-auto')}
+			class={'text-sm text-white px-2 pt-1.5 pb-1 rounded-lg duration-100 ' + (isSelected ? 'bg-red-600 hover:bg-red-800 ' : 'bg-[#203e64] hover:bg-[#122f55] ') + (showChain ? 'ml-2' : 'ml-auto')}
 			on:click={() => {
-				if ($selectedHadiths.includes(hadith)) selectedHadiths.set($selectedHadiths.filter((h) => h.id !== hadith.id));
-				else selectHadith();
-			}}>{$selectedHadiths.includes(hadith) ? 'Remove' : 'Add Hadith'}</button
+				if (isSelected) selectedHadiths.set($selectedHadiths.filter((h) => h.id !== hadith.id));
+				else addHadith();
+			}}>{isSelected ? 'Remove' : 'Add'}</button
 		>
 	</div>
 </div>

@@ -1,5 +1,6 @@
 export enum Page {
-	HadithPicker,
+	Main,
+	HadithSelector,
 	IsnadEditor,
 	IsnadViewer
 }

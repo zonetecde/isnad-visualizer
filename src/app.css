@@ -6,8 +6,8 @@
 
 body {
 	/* dark theme */
-	background-color: #250f1f;
-	color: #e2e8f0;
+	background-color: #c1bdfa;
+	color: black;
 
 	/* font */
 	font-family: 'Nunito', sans-serif;
@@ -24,13 +24,13 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-	background: #6d365a;
+	background: #e4dae0;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #570f36;
+	background: #9a999c;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #4e0f35;
+	background: #5e5b5d;
 }

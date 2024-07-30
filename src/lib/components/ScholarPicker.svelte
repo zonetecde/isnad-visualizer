@@ -32,7 +32,7 @@
 
 <div class="absolute inset-0 backdrop-blur-sm bg-black bg-opacity-30" transition:fade>
 	<div class="flex items-center justify-center w-full h-full">
-		<div class="w-9/12 h-[440px] bg-[#22131c] rounded-xl p-3 flex flex-col relative border-4 border-[#180a13] overflow-auto">
+		<div class="w-9/12 h-[440px] bg-[#c1bdfa] rounded-xl p-3 flex flex-col relative border-4 border-[#d3d3d3] overflow-auto">
 			<button
 				class="absolute top-2 right-2"
 				on:click={() => {
@@ -51,7 +51,7 @@
 				<p class="w-56">Search in database :</p>
 				<input
 					type="text"
-					class="w-full px-2 py-1 bg-[#ab99af] text-black placeholder:text-gray-600 rounded-xl outline-none"
+					class="w-full px-2 py-1 rounded-xl outline-none border-2"
 					placeholder="By name in arabic or english"
 					bind:value={searchText}
 					on:keydown={(e) => {
@@ -61,7 +61,7 @@
 					}}
 				/>
 				<button
-					class="absolute right-0 bg-purple-700 rounded-r-lg p-1"
+					class="absolute right-0 bg-[#86c2e4] rounded-r-lg p-1 border-2"
 					on:click={() => {
 						searchScholar();
 					}}
@@ -75,32 +75,33 @@
 			{#if searchResults.length === 0}
 				<p class="mt-8">or manually enter the scholar details :</p>
 
-				<div class="grid grid-cols-2 gap-x-3 mt-5">
+				<div class="grid grid-cols-2 gap-x-3 mt-7">
 					<label class=""
-						>English name
-						<input type="text" class="w-full px-2 py-1 border bg-[#2d1d31] rounded-xl outline-none" bind:value={scholar.nameEnglish} placeholder="English name" />
+						>English name :
+						<input type="text" class="w-full px-2 py-1 border rounded-xl outline-none" bind:value={scholar.nameEnglish} placeholder="English name" />
 					</label>
 					<label class=""
-						>Arabic name
-						<input type="text" dir="rtl" class="w-full px-2 py-1 border bg-[#2d1d31] rounded-xl outline-none arabic" bind:value={scholar.nameArabic} placeholder="Arabic name" />
+						>Arabic name :
+						<input type="text" dir="rtl" class="w-full px-2 py-1 border rounded-xl outline-none arabic" bind:value={scholar.nameArabic} placeholder="Arabic name" />
 					</label>
 				</div>
 
 				<label class="mt-4"
-					>Grade
-					<input type="text" class="w-full px-2 py-1 border bg-[#2d1d31] rounded-xl outline-none" bind:value={scholar.grade} placeholder="Grade" />
+					>Grade :
+					<input type="text" class="w-full px-2 py-1 border rounded-xl outline-none" bind:value={scholar.grade} placeholder="Grade" />
 				</label>
 			{:else}
-				<div class="flex flex-col gap-2 mt-3 overflow-auto">
+				<div class="flex flex-col gap-2 mt-3 px-2 overflow-auto">
 					{#each searchResults as result}
-						<div class="flex items-center gap-2 bg-[#140b13] px-3 py-2 rounded-lg">
+						<div class="flex items-center bg-white gap-2 px-3 py-2 rounded-lg">
 							<p class="text-xs">{result.nameEnglish}</p>
 							<p class="text-sm arabic ml-auto">{result.nameArabic}</p>
 							<button
-								class="bg-green-800 rounded-lg px-3 ml-1"
+								class="bg-green-500 hover:bg-green-600 duration-100 rounded-lg px-3 ml-1"
 								on:click={() => {
 									scholar = result;
 									searchResults = [];
+									searchText = scholar.nameEnglish;
 								}}
 							>
 								Select

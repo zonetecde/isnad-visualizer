@@ -18,20 +18,20 @@
 	}
 </script>
 
-<p class="mt-3"><span class="underline underline-offset-2">Isnad chain:</span> {editable ? '(hover over the chain to see the options)' : ''}</p>
+<p class="mt-3">Isnad chain: {editable ? '(hover over the chain to see the options)' : ''}</p>
 
 <div class={'flex overflow-auto gap-y-2 py-3 ' + (editable ? 'pr-20' : '')}>
 	{#each transmissionChain as transmitter, i}
 		<div class="flex items-center flex-row group min-w-max">
 			{#if editable}
-				<button class="bg-green-800 rounded-full mr-1 hidden group-hover:block" on:click={() => addScholarBefore(i)}>
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+				<button class="bg-green-500 hover:bg-green-600 duration-100 p-0.5 rounded-full mr-1 hidden group-hover:block" on:click={() => addScholarBefore(i)}>
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 					</svg>
 				</button>
 			{/if}
 
-			<div class="flex flex-col items-center gap-x-2 bg-[#140b13] px-3 py-2 rounded-2xl">
+			<div class="flex flex-col items-center gap-x-2 bg-[#9cc4d4] border px-3 py-2 rounded-2xl">
 				<p class="text-sm arabic">
 					{transmitter.nameArabic}
 				</p>
@@ -40,7 +40,7 @@
 				{#if editable}
 					<div class="flex gap-x-2">
 						<button
-							class="bg-yellow-800 rounded-full px-1 mt-2 hidden group-hover:block"
+							class="bg-yellow-500 hover:bg-yellow-600 duration-100 rounded-full px-1 mt-2 hidden group-hover:block"
 							on:click={() => {
 								editedScholarIndex = i;
 								openedScholarPicker = true;
@@ -55,7 +55,7 @@
 							</svg>
 						</button>
 						<button
-							class="bg-red-800 rounded-full mt-2 hidden group-hover:block"
+							class="bg-red-500 hover:bg-red-700 duration-100 rounded-full mt-2 hidden group-hover:block"
 							on:click={() => {
 								transmissionChain = transmissionChain.filter((_, index) => index !== i);
 
@@ -74,8 +74,8 @@
 			</div>
 
 			{#if editable}
-				<button class="bg-green-800 rounded-full ml-1 hidden group-hover:block" on:click={() => addScholarAfter(i)}>
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+				<button class="bg-green-500 p-0.5 hover:bg-green-600 duration-100 rounded-full ml-1 hidden group-hover:block" on:click={() => addScholarAfter(i)}>
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 					</svg>
 				</button>
