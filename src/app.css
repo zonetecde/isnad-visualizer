@@ -20,16 +20,17 @@ body {
 /* scroll bar */
 ::-webkit-scrollbar {
 	width: 6px;
+	height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-	background: #3d1e32;
+	background: #6d365a;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #2e081d;
+	background: #570f36;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #1f0615;
+	background: #4e0f35;
 }

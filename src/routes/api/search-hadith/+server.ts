@@ -10,20 +10,13 @@ export async function GET({ url }: { url: URL }) {
 		where: {
 			[Op.or]: [{ textArabic: { [Op.like]: `%${searchText}%` } }, { textEnglish: { [Op.like]: `%${searchText}%` } }]
 		},
+		limit: 200,
 		order: [['hadithNumber', 'ASC']]
 	});
 
-	if (hadiths.length < 200) {
-		return new Response(JSON.stringify(hadiths), {
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
-	} else {
-		return new Response(JSON.stringify(hadiths.slice(0, 200)), {
-			headers: {
-				'content-type': 'application/json'
-			}
-		});
-	}
+	return new Response(JSON.stringify(hadiths), {
+		headers: {
+			'content-type': 'application/json'
+		}
+	});
 }

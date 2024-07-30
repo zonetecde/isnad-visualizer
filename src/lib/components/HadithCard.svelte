@@ -2,6 +2,7 @@
 	import type Hadith from '$lib/models/Hadith';
 	import { hadithEditorModalVisible, selectedHadiths } from '$lib/stores/globalStore';
 	import { onMount } from 'svelte';
+	import IsnadChain from './IsnadChain.svelte';
 
 	export let hadith: Hadith;
 	export let showChain: boolean = false; // Whether to show the transmission chain of the hadith
@@ -35,21 +36,8 @@
 	<p class="mt-2 text-sm overflow-hidden line-clamp-3">{hadith.textEnglish}</p>
 
 	{#if showChain && hadith.transmissionChain}
-		<div class="flex flex-wrap gap-y-2 mt-4">
-			{#each hadith.transmissionChain as transmitter, i}
-				<div class="flex items-center">
-					<div class="flex flex-col items-center gap-x-2 bg-[#140b13] px-3 py-2 rounded-2xl">
-						<p class="text-sm arabic">{transmitter.nameArabic}</p>
-						<p class="text-xs">{transmitter.nameEnglish}</p>
-					</div>
-
-					{#if i !== hadith.transmissionChain.length - 1}
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mx-2">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-						</svg>
-					{/if}
-				</div>
-			{/each}
+		<div class="mt-4">
+			<IsnadChain transmissionChain={hadith.transmissionChain} />
 		</div>
 	{/if}
 
