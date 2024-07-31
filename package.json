@@ -37,7 +37,6 @@
 		"@sequelize/core": "^7.0.0-alpha.36",
 		"@tailwindcss/line-clamp": "^0.4.4",
 		"@types/graphviz": "^0.0.39",
-		"@xyflow/svelte": "^0.1.14",
 		"dotenv": "^16.4.5",
 		"graphviz": "^0.0.9",
 		"pg": "^8.11.3",
