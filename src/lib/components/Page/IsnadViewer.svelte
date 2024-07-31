@@ -2,11 +2,13 @@
 	import { selectedHadiths } from '$lib/stores/globalStore';
 	import { onMount } from 'svelte';
 
-	let imgPath: string = '';
+	let imgPath: string;
 
 	onMount(async () => {
 		// Génère le graphique
-		const reponse = await fetch('/api/flowchart-gen');
+		const reponse = await fetch('/api/flowchart-gen', {
+			method: 'POST'
+		});
 
 		if (reponse.ok) {
 			// Image du graphique
@@ -17,4 +19,6 @@
 	});
 </script>
 
-<img src={imgPath} alt="Graphique de la chaîne de transmission" />
+{#if imgPath}
+	<img src={imgPath} alt="Graphique de la chaîne de transmission" />
+{/if}
