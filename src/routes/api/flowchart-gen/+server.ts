@@ -1,47 +1,63 @@
-import graphviz from 'graphviz';
+import graphviz, { type Node } from 'graphviz';
 import fs from 'fs';
+import type Hadith from '$lib/models/Hadith';
+import type Scholar from '$lib/models/Scholar';
+import { generateRandomId } from '$lib';
 
 /** @type {import('./types').RequestHandler} */
 export async function POST({ request }: { request: Request }) {
-	const graphNode = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+	const body = await request.json();
 
-	const graphEdge = [
-		['A', 'B'],
-		['A', 'C'],
-		['A', 'D'],
-		['B', 'E'],
-		['B', 'F'],
-		['C', 'G'],
-		['C', 'H'],
-		['D', 'I'],
-		['D', 'J']
-	];
+	const hadiths = body.hadiths;
+	const isnads = body.hadiths.map((hadith: Hadith) => hadith.transmissionChain);
 
-	var g = graphviz.digraph('G');
-	g.set('dpi', 300);
-	//g.set('rankdir', 'LR');
-	g.set('rankdir', 'TB');
-	g.set('splines', 'ortho');
+	// Create a graph
+	const graph = graphviz.digraph('G');
 
-	graphNode.forEach((node) => {
-		g.addNode(node, { shape: 'box', color: 'blue' });
+	// Set the graph properties
+	graph.set('dpi', 200);
+	graph.set('rankdir', body.graphStyle.orientation);
+	graph.set('splines', body.graphStyle.splines);
+
+	// dictionary to store the nodes
+	const nodes: { [key: string]: Node } = {};
+
+	// Create the nodes
+	isnads.forEach((isnad: Scholar[]) => {
+		isnad.forEach((node: Scholar) => {
+			node.graphNodeId = generateRandomId();
+			node.graphNodeLabel = node.nameArabic + '\n' + node.nameEnglish;
+
+			nodes[node.graphNodeId] = graph.addNode(node.graphNodeId, { shape: 'box', color: 'blue', fontname: body.graphStyle.font, label: node.graphNodeLabel });
+		});
 	});
 
-	graphEdge.forEach((edge) => {
-		g.addEdge(edge[0], edge[1], { arrowhead: 'none' });
+	// Create the edges
+
+	isnads.forEach((isnad: Scholar[]) => {
+		// loop through the isnad chain
+		for (let i = 1; i < isnad.length; i++) {
+			graph.addEdge(nodes[isnad[i - 1].graphNodeId], nodes[isnad[i].graphNodeId], {
+				color: 'black',
+				fontname: body.graphStyle.font,
+				fontsize: 10
+			});
+		}
 	});
 
-	const randomName = Math.random().toString(36).substring(7);
+	// Generate a random name for the image
 
-	g.setGraphVizPath('C:/Program Files/Graphviz/bin');
-	g.output('png', './static/flowchart/' + randomName + '.png');
+	const randomName = generateRandomId();
+
+	graph.setGraphVizPath('C:/Program Files/Graphviz/bin');
+	graph.output('png', './static/flowchart/' + randomName + '.png');
 
 	// Tant que le fichier n'est pas créé, on attend
 	while (!fs.existsSync('./static/flowchart/' + randomName + '.png')) {
 		await new Promise((resolve) => setTimeout(resolve, 100));
 	}
 
-	await new Promise((resolve) => setTimeout(resolve, 100));
+	await new Promise((resolve) => setTimeout(resolve, 300));
 
 	// return the image path
 	return new Response('/flowchart/' + randomName + '.png', {

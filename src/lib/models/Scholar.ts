@@ -23,4 +23,7 @@ export default class Scholar extends Model<InferAttributes<Scholar>, InferCreati
 	@Attribute(DataTypes.STRING)
 	@NotNull
 	declare grade: string;
+
+	declare graphNodeLabel: string;
+	declare graphNodeId: string;
 }
