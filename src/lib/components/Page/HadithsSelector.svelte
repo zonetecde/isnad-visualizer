@@ -8,6 +8,12 @@
 	import HadithEditor from '../HadithEditor.svelte';
 
 	onMount(async () => {
+		if ($selectedHadiths.length === 0) {
+			if (localStorage.getItem('selectedHadiths')) {
+				selectedHadiths.set(JSON.parse(localStorage.getItem('selectedHadiths')!));
+			}
+		}
+
 		if ($hadithBooks.length === 0) {
 			const response = await fetch('/api/get-hadith-books');
 			const data = await response.json();
@@ -39,20 +45,20 @@
 			</div>
 		</div>
 
+		<button
+			class="absolute bottom-6 left-1/2 -translate-x-1/2 text-xl font-bold bg-[#203e64] text-white px-4 py-1.5 rounded-lg hover:bg-[#122f55] duration-100"
+			on:click={() => {
+				localStorage.setItem('selectedHadiths', JSON.stringify($selectedHadiths));
+				currentPage.set(Page.IsnadViewer);
+			}}
+		>
+			Visualize Isnad
+		</button>
+
 		{#if $hadithEditorModalVisible !== -1}
 			<div class="absolute inset-0 backdrop-blur-sm" transition:fade>
 				<HadithEditor />
 			</div>
 		{/if}
 	</div>
-
-	<button
-		class="absolute bottom-6 text-xl font-bold bg-[#203e64] text-white px-4 py-1.5 rounded-lg hover:bg-[#122f55] duration-100"
-		on:click={() => {
-			localStorage.setItem('selectedHadiths', JSON.stringify($selectedHadiths));
-			currentPage.set(Page.IsnadViewer);
-		}}
-	>
-		Visualize Isnad
-	</button>
 </div>
