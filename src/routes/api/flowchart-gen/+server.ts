@@ -25,32 +25,62 @@ export async function POST({ request }: { request: Request }) {
 	function getOrCreateNode(scholar: Scholar, chainIndex: number, position: number) {
 		const key = `${scholar.id}_${chainIndex}_${position}`;
 		if (!nodes.has(key)) {
-			const node = graph.addNode(key, {
-				label: `${scholar.nameArabic}\n${scholar.nameEnglish}`,
-				shape: 'box'
-			});
+			const node = graph.addNode(key);
+			node.set('label', `${scholar.nameArabic}\n${scholar.nameEnglish}`);
+			node.set('shape', 'box');
 			nodes.set(key, node);
 		}
 		return key;
 	}
 
-	// Function to check if a scholar is common at the end of multiple chains
-	function isCommonEndScholar(scholar: Scholar) {
-		return isnads.filter((chain: any) => chain[chain.length - 1].id === scholar.id || chain[chain.length - 2].id === scholar.id).length > 1;
+	// Function to find common suffix length between two arrays
+	function commonSuffixLength(arr1: Scholar[], arr2: Scholar[]) {
+		let i = arr1.length - 1;
+		let j = arr2.length - 1;
+		let count = 0;
+		while (i >= 0 && j >= 0 && arr1[i].id === arr2[j].id) {
+			count++;
+			i--;
+			j--;
+		}
+		return count;
+	}
+
+	// Find the maximum common suffix length across all chains
+	let maxCommonSuffixLength = 0;
+	for (let i = 0; i < isnads.length; i++) {
+		for (let j = i + 1; j < isnads.length; j++) {
+			maxCommonSuffixLength = Math.max(maxCommonSuffixLength, commonSuffixLength(isnads[i], isnads[j]));
+		}
 	}
 
 	// Process each isnad chain
 	isnads.forEach((chain: Scholar[], chainIndex: number) => {
 		for (let i = 0; i < chain.length; i++) {
 			const scholar = chain[i];
-			const isLast = i === chain.length - 1;
-			const isSecondLast = i === chain.length - 2;
+			const positionFromEnd = chain.length - 1 - i;
 
-			// Use a common ID for scholars at the end or second to last of multiple chains, unique ID otherwise
-			const nodeId = isCommonEndScholar(scholar) && (isLast || isSecondLast) ? scholar.id.toString() : getOrCreateNode(scholar, chainIndex, i);
+			// Use a common ID for scholars in the common suffix, unique ID otherwise
+			const nodeId = positionFromEnd < maxCommonSuffixLength ? scholar.id.toString() : getOrCreateNode(scholar, chainIndex, i);
 
 			if (i > 0) {
-				const prevNodeId = isCommonEndScholar(chain[i - 1]) && (isLast || i === chain.length - 1) ? chain[i - 1].id.toString() : getOrCreateNode(chain[i - 1], chainIndex, i - 1);
+				const prevPositionFromEnd = chain.length - i;
+				const prevNodeId = prevPositionFromEnd < maxCommonSuffixLength ? chain[i - 1].id.toString() : getOrCreateNode(chain[i - 1], chainIndex, i - 1);
+
+				// if node does not exists
+				if (!nodes.has(nodeId)) {
+					const node = graph.addNode(nodeId);
+					node.set('label', `${scholar.nameArabic}\n${scholar.nameEnglish}`);
+					node.set('shape', 'box');
+					nodes.set(nodeId, node);
+				}
+				if (!nodes.has(prevNodeId)) {
+					const node = graph.addNode(prevNodeId);
+					node.set('label', `${scholar.nameArabic}\n${scholar.nameEnglish}`);
+					node.set('shape', 'box');
+					nodes.set(prevNodeId, node);
+				}
+
 				graph.addEdge(prevNodeId, nodeId);
 			}
 		}

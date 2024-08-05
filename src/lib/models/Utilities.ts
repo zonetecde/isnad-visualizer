@@ -1,8 +1,11 @@
 import type Hadith from './Hadith';
 import type Scholar from './Scholar';
 
+const unknownScholars = new Map<Scholar, number>();
+
 export function createUnknownScholar(): Scholar {
 	return {
+		id: new Date().getTime(),
 		nameArabic: 'مجهول',
 		nameEnglish: 'Unknown',
 		scholarId: -1,

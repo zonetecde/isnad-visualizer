@@ -28,6 +28,10 @@
 			}
 		}
 	}
+
+	$: if (scholar.nameEnglish || scholar.nameArabic) {
+		// TODO: Mettre le même id pour tout les scholars ayant le même nom
+	}
 </script>
 
 <div class="absolute inset-0 backdrop-blur-sm bg-black bg-opacity-30" transition:fade>
