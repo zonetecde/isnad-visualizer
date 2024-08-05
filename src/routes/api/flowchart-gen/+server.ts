@@ -1,4 +1,4 @@
-import graphviz, { type Node } from 'graphviz';
+import graphviz from 'graphviz';
 import fs from 'fs';
 import type Hadith from '$lib/models/Hadith';
 import type Scholar from '$lib/models/Scholar';
@@ -15,71 +15,44 @@ export async function POST({ request }: { request: Request }) {
 
 	// Set the graph properties
 	graph.set('dpi', 200);
-	graph.set('rankdir', body.graphStyle.orientation);
-	graph.set('splines', body.graphStyle.splines);
+	graph.set('rankdir', 'TB');
+	graph.set('splines', 'ortho');
 
-	// Ajoute les transmetteurs en tant que noeuds
-	// D'abord regarde quelles transmetteurs mettre une seul fois
-	let reversed_isnads: Scholar[][] = isnads.map((isnad: Scholar[]) => isnad.slice().reverse());
+	// Create a map to store nodes
+	const nodes = new Map();
 
-	let smallestLength = 999;
-	reversed_isnads.forEach((isnad: Scholar[]) => {
-		if (isnad.length < smallestLength) {
-			smallestLength = isnad.length;
+	// Function to get or create a node
+	function getOrCreateNode(scholar: Scholar, chainIndex: number, position: number) {
+		const key = `${scholar.id}_${chainIndex}_${position}`;
+		if (!nodes.has(key)) {
+			const node = graph.addNode(key, {
+				label: `${scholar.nameArabic}\n${scholar.nameEnglish}`,
+				shape: 'box'
+			});
+			nodes.set(key, node);
 		}
-	});
-
-	// Les transmetteurs qui doivent êtres ajoutés une seul fois sont ceux qui ont le meme index au debut sans interruption
-	let uniqueTransmitters: Scholar[] = [];
-	for (let z = 0; z < smallestLength; z++) {
-		const scholars = reversed_isnads.map((isnad: Scholar[]) => {
-			return isnad[z];
-		});
-
-		const atLeastTwoEqual = (arr: Scholar[]) => {
-			for (let i = 0; i < arr.length; i++) {
-				for (let j = i + 1; j < arr.length; j++) {
-					if (arr[i].id === arr[j].id) {
-						return true;
-					}
-				}
-			}
-			return false;
-		};
-
-		if (atLeastTwoEqual(scholars)) {
-			// Vérifie que les scholars d'avant dans la chaine sont aussi dans la liste
-
-			uniqueTransmitters.push(scholars[0]);
-			console.log('Adding ' + scholars[0].nameEnglish + ' to uniqueTransmitters');
-		} else {
-			break;
-		}
+		return key;
 	}
 
-	// Ajoute les nodes
-	// D'abord les transmetteurs qui doivent être ajoutés une seul fois
-	uniqueTransmitters.forEach((scholar: Scholar) => {
-		scholar.graphNodeId = generateRandomId();
-		graph.addNode(scholar.graphNodeId, { shape: 'box', color: 'blue', fontname: body.graphStyle.font, label: scholar.nameArabic + '\n' + scholar.nameEnglish });
-	});
+	// Function to check if a scholar is common at the end of multiple chains
+	function isCommonEndScholar(scholar: Scholar) {
+		return isnads.filter((chain: any) => chain[chain.length - 1].id === scholar.id || chain[chain.length - 2].id === scholar.id).length > 1;
+	}
 
-	// Ensuite tout les autres
-	isnads.forEach((isnad: Scholar[]) => {
-		isnad.forEach((scholar: Scholar) => {
-			if (!uniqueTransmitters.includes(scholar)) {
-				scholar.graphNodeId = generateRandomId();
-				graph.addNode(scholar.graphNodeId, { shape: 'box', color: 'blue', fontname: body.graphStyle.font, label: scholar.nameArabic + '\n' + scholar.nameEnglish });
+	// Process each isnad chain
+	isnads.forEach((chain: Scholar[], chainIndex: number) => {
+		for (let i = 0; i < chain.length; i++) {
+			const scholar = chain[i];
+			const isLast = i === chain.length - 1;
+			const isSecondLast = i === chain.length - 2;
+
+			// Use a common ID for scholars at the end or second to last of multiple chains, unique ID otherwise
+			const nodeId = isCommonEndScholar(scholar) && (isLast || isSecondLast) ? scholar.id.toString() : getOrCreateNode(scholar, chainIndex, i);
+
+			if (i > 0) {
+				const prevNodeId = isCommonEndScholar(chain[i - 1]) && (isLast || i === chain.length - 1) ? chain[i - 1].id.toString() : getOrCreateNode(chain[i - 1], chainIndex, i - 1);
+				graph.addEdge(prevNodeId, nodeId);
 			}
-		});
-	});
-
-	// Ajoute les edges
-	isnads.forEach((isnad: Scholar[]) => {
-		for (let i = 0; i < isnad.length - 1; i++) {
-			const from = isnad[i];
-			const to = isnad[i + 1];
-			graph.addEdge(from.graphNodeId, to.graphNodeId, { fontname: body.graphStyle.font, fontsize: body.graphStyle.fontSize });
 		}
 	});
 
@@ -89,7 +62,7 @@ export async function POST({ request }: { request: Request }) {
 	graph.setGraphVizPath('C:/Program Files/Graphviz/bin');
 	graph.output('png', './static/flowchart/' + randomName + '.png');
 
-	// Tant que le fichier n'est pas créé, on attend
+	// Wait for the file to be created
 	while (!fs.existsSync('./static/flowchart/' + randomName + '.png')) {
 		await new Promise((resolve) => setTimeout(resolve, 100));
 	}
