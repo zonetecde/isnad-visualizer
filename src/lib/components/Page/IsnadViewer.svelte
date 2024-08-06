@@ -71,7 +71,7 @@
 	let isMounted = false;
 
 	onMount(async () => {
-		const floatingChat = document.querySelector('.floatingchat-container-wrap');
+		const floatingChat = document.querySelector('.floatingchat-container-wrap-mobi') || document.querySelector('.floatingchat-container-wrap');
 		if (floatingChat) {
 			floatingChat.remove();
 		}
