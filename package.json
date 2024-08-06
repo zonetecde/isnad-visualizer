@@ -37,11 +37,13 @@
 		"@sequelize/core": "^7.0.0-alpha.36",
 		"@tailwindcss/line-clamp": "^0.4.4",
 		"@types/graphviz": "^0.0.39",
+		"@types/sharp": "^0.32.0",
 		"dotenv": "^16.4.5",
 		"graphviz": "^0.0.9",
 		"pg": "^8.11.3",
 		"pg-hstore": "^2.3.4",
 		"sequelize": "^6.36.0",
+		"sharp": "^0.33.4",
 		"svelte-french-toast": "^1.2.0"
 	}
 }

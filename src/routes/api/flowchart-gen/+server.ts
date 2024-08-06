@@ -14,20 +14,43 @@ export async function POST({ request }: { request: Request }) {
 	const graph = graphviz.digraph('G');
 
 	// Set the graph properties
-	graph.set('dpi', 200);
-	graph.set('rankdir', 'TB');
-	graph.set('splines', 'ortho');
+	graph.set('rankdir', body.graphStyle.direction);
+	graph.set('splines', body.graphStyle.splines);
+	// couleur de fond
+	graph.set('bgcolor', body.graphStyle.bgColor);
 
 	// Create a map to store nodes
 	const nodes = new Map();
+
+	// Function to set the style of a node
+	function setNodeStyle(node: graphviz.Node, scholar: Scholar) {
+		let label = '';
+		if (body.graphStyle.label === 'arabic' || body.graphStyle.label === 'both') {
+			label += scholar.nameArabic;
+		}
+
+		if (body.graphStyle.label === 'both') {
+			label += '\n';
+		}
+
+		if (body.graphStyle.label === 'transliteration' || body.graphStyle.label === 'both') {
+			label += scholar.nameEnglish;
+		}
+
+		node.set('label', label);
+		node.set('shape', body.graphStyle.shape);
+		node.set('fontname', body.graphStyle.fontName);
+		node.set('color', body.graphStyle.borderColor);
+		node.set('fontcolor', body.graphStyle.textColor);
+		node.set('penwidth', body.graphStyle.borderWidth);
+	}
 
 	// Function to get or create a node
 	function getOrCreateNode(scholar: Scholar, chainIndex: number, position: number) {
 		const key = `${scholar.id}_${chainIndex}_${position}`;
 		if (!nodes.has(key)) {
 			const node = graph.addNode(key);
-			node.set('label', `${scholar.nameArabic}\n${scholar.nameEnglish}`);
-			node.set('shape', 'box');
+			setNodeStyle(node, scholar);
 			nodes.set(key, node);
 		}
 		return key;
@@ -70,18 +93,18 @@ export async function POST({ request }: { request: Request }) {
 				// if node does not exists
 				if (!nodes.has(nodeId)) {
 					const node = graph.addNode(nodeId);
-					node.set('label', `${scholar.nameArabic}\n${scholar.nameEnglish}`);
-					node.set('shape', 'box');
+					setNodeStyle(node, scholar);
 					nodes.set(nodeId, node);
 				}
 				if (!nodes.has(prevNodeId)) {
 					const node = graph.addNode(prevNodeId);
-					node.set('label', `${scholar.nameArabic}\n${scholar.nameEnglish}`);
-					node.set('shape', 'box');
+					setNodeStyle(node, chain[i - 1]);
 					nodes.set(prevNodeId, node);
 				}
 
-				graph.addEdge(prevNodeId, nodeId);
+				graph.addEdge(prevNodeId, nodeId, {
+					arrowhead: body.graphStyle.arrowHead
+				});
 			}
 		}
 	});
@@ -90,17 +113,17 @@ export async function POST({ request }: { request: Request }) {
 	const randomName = generateRandomId();
 
 	graph.setGraphVizPath('C:/Program Files/Graphviz/bin');
-	graph.output('png', './static/flowchart/' + randomName + '.png');
+	graph.output('svg', './static/flowchart/' + randomName + '.svg');
 
 	// Wait for the file to be created
-	while (!fs.existsSync('./static/flowchart/' + randomName + '.png')) {
+	while (!fs.existsSync('./static/flowchart/' + randomName + '.svg')) {
 		await new Promise((resolve) => setTimeout(resolve, 100));
 	}
 
-	await new Promise((resolve) => setTimeout(resolve, 300));
+	await new Promise((resolve) => setTimeout(resolve, 500));
 
 	// return the image path
-	return new Response('/flowchart/' + randomName + '.png', {
+	return new Response('/flowchart/' + randomName + '.svg', {
 		headers: {
 			'content-type': 'text/plain'
 		}
