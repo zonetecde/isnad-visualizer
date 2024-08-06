@@ -44,7 +44,7 @@
 
 <div class="absolute inset-0 backdrop-blur-sm bg-black bg-opacity-30" transition:fade>
 	<div class="flex items-center justify-center w-full h-full">
-		<div class="w-9/12 h-[440px] bg-[#c1bdfa] rounded-xl p-3 flex flex-col relative border-4 border-[#d3d3d3] overflow-auto">
+		<div class="md:w-9/12 w-11/12 h-[440px] bg-[#c1bdfa] rounded-xl p-3 flex flex-col relative border-4 border-[#d3d3d3] overflow-auto">
 			<button
 				class="absolute top-2 right-2"
 				on:click={() => {

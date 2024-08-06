@@ -33,9 +33,9 @@
 		{/if}
 	</p>
 
-	<p class="arabic overflow-hidden hadith-card-text" dir="rtl">{hadith.textArabic}</p>
+	<p class="arabic overflow-hidden hadith-card-text md:line-clamp-none line-clamp-3" dir="rtl">{hadith.textArabic}</p>
 
-	<p class="mt-2 text-sm overflow-hidden hadith-card-text">{hadith.textEnglish}</p>
+	<p class="mt-2 text-sm overflow-hidden hadith-card-text md:line-clamp-none line-clamp-3">{hadith.textEnglish}</p>
 
 	{#if showChain && hadith.transmissionChain}
 		<div class="mt-4">

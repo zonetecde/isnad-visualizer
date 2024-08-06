@@ -20,7 +20,7 @@
 
 <p class="mt-3">Isnad chain: {editable ? '(hover over the chain to see the options)' : ''}</p>
 
-<div class={'flex overflow-auto gap-y-2 py-3 ' + (editable ? 'pr-20' : '')}>
+<div class={'flex overflow-auto gap-y-2 py-3 min-h-[100px] ' + (editable ? 'pr-20' : '')}>
 	{#each transmissionChain as transmitter, i}
 		<div class="flex items-center flex-row group min-w-max">
 			{#if editable}

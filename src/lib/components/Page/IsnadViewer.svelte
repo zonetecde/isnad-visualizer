@@ -174,8 +174,8 @@
 	}
 </script>
 
-<div class="flex flex-row h-full relative">
-	<section class="w-1/6 min-w-[250px] border-r-2 bg-[#9399d3] border-[#767bad] py-3 px-2 overflow-y-auto">
+<div class="flex md:flex-row flex-col-reverse h-full relative">
+	<section class="md:w-1/6 h-2/5 md:h-full min-w-[250px] border-r-2 bg-[#9399d3] border-[#767bad] py-3 px-2 overflow-y-auto">
 		<div class="flex flex-col h-full">
 			<button
 				class="absolute top-2 left-2 bg-[#c7d3dd] rounded-full"
@@ -375,7 +375,7 @@
 			<button class="bg-[#203e64] text-white px-4 py-1.5 rounded-lg hover:bg-[#122f55] duration-100 mt-3" on:click={downloadImg}> Download Flowchart </button>
 		</div>
 	</section>
-	<div class="w-5/6 flex items-center justify-center py-10">
+	<div class="md:w-5/6 w-full h-3/5 md:h-full flex items-center justify-center py-10">
 		{#if imgPath}
 			<img src={imgPath} alt="Graphique de la chaîne de transmission" class="object-contain w-full h-full" transition:fade />
 		{/if}

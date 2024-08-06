@@ -24,14 +24,14 @@
 </script>
 
 <div class="w-screen h-screen flex justify-center items-center">
-	<div class="w-10/12 h-5/6 border-4 rounded-xl bg-[#99b0e2]">
-		<div class="grid grid-cols-2 w-full h-full">
-			<div class="flex flex-col p-2 overflow-hidden">
+	<div class="md:w-10/12 md:h-5/6 w-screen h-screen border-4 rounded-xl bg-[#99b0e2] flex flex-col overflow-auto">
+		<div class="grid md:grid-rows-1 md:grid-cols-2 w-full h-full">
+			<div class="flex flex-col md:p-2 p-1 overflow-hidden min-h-[300px]">
 				<h3 class="text-center text-2xl font-bold mb-5">Hadiths Database</h3>
 				<HadithPicker />
 			</div>
 
-			<div class="flex flex-col p-2 overflow-hidden">
+			<div class="flex flex-col md:p-2 p-1 overflow-hidden min-h-[300px]">
 				<h3 class="text-center text-2xl font-bold mb-5">Selected Hadith{$selectedHadiths.length > 1 ? 's' : ''}</h3>
 
 				{#if $selectedHadiths.length === 0}
@@ -47,7 +47,7 @@
 		</div>
 
 		<button
-			class="absolute bottom-6 left-1/2 -translate-x-1/2 text-xl font-bold bg-[#203e64] text-white px-4 py-1.5 rounded-lg hover:bg-[#122f55] duration-100"
+			class="md:absolute my-2 md:my-0 mx-auto bottom-6 left-1/2 md:-translate-x-1/2 text-xl font-bold bg-[#203e64] text-white px-4 py-1.5 rounded-lg hover:bg-[#122f55] duration-100"
 			on:click={() => {
 				if ($selectedHadiths.length === 0) {
 					toast.error('Please select at least one hadith to visualize the isnad.');
