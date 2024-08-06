@@ -6,6 +6,7 @@
 	import HadithCard from '../HadithCard.svelte';
 	import HadithPicker from '../HadithPicker.svelte';
 	import HadithEditor from '../HadithEditor.svelte';
+	import toast from 'svelte-french-toast';
 
 	onMount(async () => {
 		if ($selectedHadiths.length === 0) {
@@ -48,6 +49,11 @@
 		<button
 			class="absolute bottom-6 left-1/2 -translate-x-1/2 text-xl font-bold bg-[#203e64] text-white px-4 py-1.5 rounded-lg hover:bg-[#122f55] duration-100"
 			on:click={() => {
+				if ($selectedHadiths.length === 0) {
+					toast.error('Please select at least one hadith to visualize the isnad.');
+					return;
+				}
+
 				localStorage.setItem('selectedHadiths', JSON.stringify($selectedHadiths));
 				currentPage.set(Page.IsnadViewer);
 			}}

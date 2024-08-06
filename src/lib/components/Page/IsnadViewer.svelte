@@ -68,6 +68,8 @@
 	let borderColor: string = 'black';
 	let textColor: string = 'black';
 
+	let isMounted = false;
+
 	onMount(async () => {
 		// Si aucun hadith n'est sélectionné, on vérifie dans le localStorage
 		if ($selectedHadiths.length === 0) {
@@ -80,16 +82,33 @@
 			}
 		}
 
+		// Récupère les paramètres de customisation du graphique depuis le localStorage
+		const settings = localStorage.getItem('flowchart-settings');
+		if (settings) {
+			const parsedSettings = JSON.parse(settings);
+			direction = parsedSettings.direction;
+			arrowHead = parsedSettings.arrowHead;
+			splines = parsedSettings.splines;
+			fontName = parsedSettings.fontName;
+			bgColor = parsedSettings.bgColor;
+			label = parsedSettings.label;
+			shape = parsedSettings.shape;
+			borderColor = parsedSettings.borderColor;
+			textColor = parsedSettings.textColor;
+			borderWidth = parsedSettings.borderWidth;
+			imageFormat = parsedSettings.imageFormat || 'png';
+		}
+
+		isMounted = true;
 		generateFlowchart();
 	});
 
-	let lastUpdate = Date.now() - 2000;
 	$: if (direction || arrowHead || splines || fontName || bgColor || label || shape || borderColor || textColor || borderWidth) {
-		// Vérifie qu'on ne spam pas l'API
-		if (Date.now() - lastUpdate >= 500) {
-			lastUpdate = Date.now();
-
+		if (isMounted) {
 			if ($selectedHadiths.length > 0) generateFlowchart();
+
+			// save settings in local storage
+			localStorage.setItem('flowchart-settings', JSON.stringify({ direction, arrowHead, splines, fontName, bgColor, label, shape, borderColor, textColor, borderWidth, imageFormat }));
 		}
 	}
 
@@ -155,9 +174,20 @@
 	}
 </script>
 
-<div class="flex flex-row h-full">
+<div class="flex flex-row h-full relative">
 	<section class="w-1/6 min-w-[250px] border-r-2 bg-[#9399d3] border-[#767bad] py-3 px-2 overflow-y-auto">
 		<div class="flex flex-col h-full">
+			<button
+				class="absolute top-2 left-2 bg-[#c7d3dd] rounded-full"
+				on:click={() => {
+					currentPage.set(Page.HadithSelector);
+				}}
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+				</svg>
+			</button>
+
 			<h2 class="text-center font-bold text-2xl mb-2">Customisation</h2>
 
 			<h4 class="text-lg font-bold underline underline-offset-1">General</h4>

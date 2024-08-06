@@ -77,6 +77,8 @@ export async function POST({ request }: { request: Request }) {
 		}
 	}
 
+	let edges: string[] = [];
+
 	// Process each isnad chain
 	isnads.forEach((chain: Scholar[], chainIndex: number) => {
 		for (let i = 0; i < chain.length; i++) {
@@ -102,9 +104,15 @@ export async function POST({ request }: { request: Request }) {
 					nodes.set(prevNodeId, node);
 				}
 
-				graph.addEdge(prevNodeId, nodeId, {
-					arrowhead: body.graphStyle.arrowHead
-				});
+				// Only add the edge if it doesn't already exist
+				const edgeKey = `${prevNodeId}_${nodeId}`;
+				if (!edges.includes(edgeKey)) {
+					graph.addEdge(prevNodeId, nodeId, {
+						arrowhead: body.graphStyle.arrowHead
+					});
+
+					edges.push(edgeKey);
+				}
 			}
 		}
 	});
