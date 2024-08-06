@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type Scholar from '$lib/models/Scholar';
+	import { selectedHadiths } from '$lib/stores/globalStore';
 	import { createEventDispatcher } from 'svelte';
 	import toast from 'svelte-french-toast';
 	import { fade } from 'svelte/transition';
@@ -29,8 +30,15 @@
 		}
 	}
 
-	$: if (scholar.nameEnglish || scholar.nameArabic) {
-		// TODO: Mettre le même id pour tout les scholars ayant le même nom
+	function checkForId() {
+		// Si la personne a rentré un scholar elle même, met le même id pour tout ceux qui ont le même nom
+		$selectedHadiths.forEach((hadith) => {
+			hadith.transmissionChain.forEach((_scholar) => {
+				if (scholar.nameEnglish === _scholar.nameEnglish && scholar.nameArabic === _scholar.nameArabic) {
+					scholar.id = _scholar.id;
+				}
+			});
+		});
 	}
 </script>
 
@@ -118,6 +126,8 @@
 			<button
 				class="mt-auto w-60 mx-auto text-xl font-bold bg-green-800 text-white px-2 py-1.5 rounded-lg hover:bg-green-900 duration-100"
 				on:click={() => {
+					checkForId();
+
 					dispatch('close');
 				}}>Close</button
 			>

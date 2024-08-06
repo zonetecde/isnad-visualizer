@@ -27,8 +27,6 @@ export async function POST({ request }: { request: Request }) {
 		};
 	}
 
-	console.log('PNG file created at: ' + pngPath);
-
 	// return the image path
 	return new Response(pngPath, {
 		headers: {
