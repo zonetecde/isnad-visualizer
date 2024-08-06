@@ -7,7 +7,7 @@ import { generateRandomId } from '$lib';
 /** @type {import('./types').RequestHandler} */
 export async function POST({ request }: { request: Request }) {
 	// create a file to save log
-	fs.writeFileSync('log.txt', 'Request received\n');
+	fs.writeFileSync('log.txt', 'Request received!\n');
 
 	try {
 		const body = await request.json();
