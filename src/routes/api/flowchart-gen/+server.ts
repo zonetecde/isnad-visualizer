@@ -118,14 +118,12 @@ export async function POST({ request }: { request: Request }) {
 		}
 	});
 
-	fs.writeFileSync('log.txt', 'Request received!4\n');
-
 	// Generate a random name for the image
 	const randomName = generateRandomId();
 
-	//graph.setGraphVizPath('C:/Program Files/Graphviz/bin');
-	// default linux path
-	graph.setGraphVizPath('/usr/bin');
+	const isDev = fs.existsSync('C:/Program Files/Graphviz/bin');
+
+	graph.setGraphVizPath(isDev ? 'C:/Program Files/Graphviz/bin' : '/usr/bin');
 	graph.output('svg', './static/flowchart/' + randomName + '.svg');
 
 	// Wait for the file to be created
@@ -134,8 +132,6 @@ export async function POST({ request }: { request: Request }) {
 	}
 
 	await new Promise((resolve) => setTimeout(resolve, 500));
-
-	fs.writeFileSync('log.txt', 'Request received!5\n');
 
 	// return the image path
 	return new Response('/flowchart/' + randomName + '.svg', {

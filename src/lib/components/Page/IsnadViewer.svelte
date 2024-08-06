@@ -108,7 +108,7 @@
 			if ($selectedHadiths.length > 0) generateFlowchart();
 
 			// save settings in local storage
-			localStorage.setItem('flowchart-settings', JSON.stringify({ direction, arrowHead, splines, fontName, bgColor, label, shape, borderColor, textColor, borderWidth, imageFormat }));
+			localStorage.setItem('flowchart-settings', JSON.stringify({ direction, arrowHead, splines, fontName, bgColor, label, shape, borderColor, textColor, borderWidth }));
 		}
 	}
 
@@ -171,6 +171,9 @@
 				a.click();
 			}
 		}
+
+		// save settings in local storage
+		localStorage.setItem('flowchart-settings', JSON.stringify({ direction, arrowHead, splines, fontName, bgColor, label, shape, borderColor, textColor, borderWidth, imageFormat }));
 	}
 </script>
 
