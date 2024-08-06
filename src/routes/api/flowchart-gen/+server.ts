@@ -23,6 +23,8 @@ export async function POST({ request }: { request: Request }) {
 		// couleur de fond
 		graph.set('bgcolor', body.graphStyle.bgColor);
 
+		fs.writeFileSync('log.txt', 'Request received!2\n');
+
 		// Create a map to store nodes
 		const nodes = new Map();
 
@@ -83,6 +85,8 @@ export async function POST({ request }: { request: Request }) {
 
 		let edges: string[] = [];
 
+		fs.writeFileSync('log.txt', 'Request received!3\n');
+
 		// Process each isnad chain
 		isnads.forEach((chain: Scholar[], chainIndex: number) => {
 			for (let i = 0; i < chain.length; i++) {
@@ -121,6 +125,8 @@ export async function POST({ request }: { request: Request }) {
 			}
 		});
 
+		fs.writeFileSync('log.txt', 'Request received!4\n');
+
 		// Generate a random name for the image
 		const randomName = generateRandomId();
 
@@ -133,6 +139,8 @@ export async function POST({ request }: { request: Request }) {
 		}
 
 		await new Promise((resolve) => setTimeout(resolve, 500));
+
+		fs.writeFileSync('log.txt', 'Request received!5\n');
 
 		// return the image path
 		return new Response('/flowchart/' + randomName + '.svg', {
