@@ -6,7 +6,6 @@
 
 	$: if ($currentPage) {
 		// Add to the url without reloading the page
-
 		if (pageName[$currentPage]) history.pushState(null, '', `/${pageName[$currentPage]}`);
 	}
 </script>

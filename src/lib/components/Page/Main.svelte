@@ -1,6 +1,17 @@
 <script>
 	import { Page } from '$lib/models/Page';
 	import { currentPage } from '$lib/stores/globalStore';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		//@ts-ignore
+		kofiWidgetOverlay.draw('zonetecde', {
+			type: 'floating-chat',
+			'floating-chat.donateButton.text': 'Support me',
+			'floating-chat.donateButton.background-color': '#00b9fe',
+			'floating-chat.donateButton.text-color': '#fff'
+		});
+	});
 </script>
 
 <div class="items-center justify-center flex flex-col h-full px-3">

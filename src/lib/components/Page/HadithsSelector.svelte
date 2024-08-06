@@ -9,6 +9,11 @@
 	import toast from 'svelte-french-toast';
 
 	onMount(async () => {
+		const floatingChat = document.querySelector('.floatingchat-container-wrap');
+		if (floatingChat) {
+			floatingChat.remove();
+		}
+
 		if ($selectedHadiths.length === 0) {
 			if (localStorage.getItem('selectedHadiths')) {
 				selectedHadiths.set(JSON.parse(localStorage.getItem('selectedHadiths')!));
@@ -24,6 +29,18 @@
 </script>
 
 <div class="w-screen h-screen flex justify-center items-center">
+	<a
+		class="absolute top-2 left-2 bg-[#6a9ec9] rounded-full"
+		href="/"
+		on:click={() => {
+			currentPage.set(Page.Main);
+		}}
+	>
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+		</svg>
+	</a>
+
 	<div class="md:w-10/12 md:h-5/6 w-screen h-screen border-4 rounded-xl bg-[#99b0e2] flex flex-col overflow-auto">
 		<div class="grid md:grid-rows-1 md:grid-cols-2 w-full h-full">
 			<div class="flex flex-col md:p-2 p-1 overflow-hidden min-h-[300px]">

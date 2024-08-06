@@ -71,6 +71,11 @@
 	let isMounted = false;
 
 	onMount(async () => {
+		const floatingChat = document.querySelector('.floatingchat-container-wrap');
+		if (floatingChat) {
+			floatingChat.remove();
+		}
+
 		// Si aucun hadith n'est sélectionné, on vérifie dans le localStorage
 		if ($selectedHadiths.length === 0) {
 			const selectedHadithsFromLocalStorage = localStorage.getItem('selectedHadiths');
