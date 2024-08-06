@@ -1,3 +1,3 @@
 export function generateRandomId() {
-	return new Date().toISOString().replace(/:/g, '-');
+	return new Date().toISOString().replace(/:/g, '-').replaceAll('.', '-');
 }
