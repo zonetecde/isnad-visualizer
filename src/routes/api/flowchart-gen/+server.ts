@@ -6,6 +6,9 @@ import { generateRandomId } from '$lib';
 
 /** @type {import('./types').RequestHandler} */
 export async function POST({ request }: { request: Request }) {
+	// create a file to save log
+	fs.writeFileSync('log.txt', 'Request received\n');
+
 	const body = await request.json();
 
 	const isnads = body.hadiths.map((hadith: Hadith) => hadith.transmissionChain);
