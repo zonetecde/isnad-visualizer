@@ -3,6 +3,7 @@
 	import { hadithEditorModalVisible, selectedHadiths } from '$lib/stores/globalStore';
 	import { onMount } from 'svelte';
 	import IsnadChain from './IsnadChain.svelte';
+	import toast from 'svelte-french-toast';
 
 	export let hadith: Hadith;
 	export let showChain: boolean = false; // Whether to show the transmission chain of the hadith
@@ -21,6 +22,10 @@
 				$selectedHadiths = [...$selectedHadiths];
 			})
 			.catch((error) => console.error(error));
+
+		toast('Please check the chain of transmission of the hadith in the "Selected Hadiths" section.', {
+			icon: '❕'
+		});
 	}
 </script>
 
