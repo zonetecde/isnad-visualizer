@@ -23,7 +23,7 @@
 			})
 			.catch((error) => console.error(error));
 
-		toast('Please check the chain of transmission of the hadith in the "Selected Hadiths" section.', {
+		toast('Please check the chain of transmission of the hadith in the "Selection of hadiths" section, as it may contain errors!', {
 			icon: '❕'
 		});
 	}
